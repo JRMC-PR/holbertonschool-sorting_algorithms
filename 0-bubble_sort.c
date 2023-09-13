@@ -7,14 +7,14 @@
 void bubble_sort(int *array, size_t size)
 {
 	/*Declarations*/
-	long unsigned int i = 0, tmp, j = 0, count;
+	unsigned long int i = 0, tmp, j = 0, count;
 	/*check inputs*/
 	if (array == NULL || size < 2)
 		return;
 	/*sort the array using bubble method*/
 	for (i = 0; i < size - 1; i++)
 	{
-			count = 0;
+		count = 0;
 		for (j = 0; j < size - i - 1; j++)
 		{
 			/*pefor the switch*/
