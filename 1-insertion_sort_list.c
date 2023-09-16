@@ -5,31 +5,45 @@
  */
 void insertion_sort_list(listint_t **list)
 {
+	listint_t *current, *insertion_point, *next_node;
 	/*validate parameter*/
-	if (list == NULL)
+	if (list == NULL || *list == NULL || (*list)->next == NULL)
 		return;
-	while (*list != NULL)
+	current = (*list)->next;
+	while (current != NULL)
 	{
-		if ((*list)->n > (*list)->next->n)
+		insertion_point = current->prev;
+		next_node = current->next;
+		while (insertion_point != NULL && insertion_point->n > current->n)
+			insertion_point = insertion_point->prev;
+		if (insertion_point == NULL)
 		{
-			(*list)->next->prev = (*list)->prev;
-			(*list)->prev = (*list)->next;
-			(*list)->next = (*list)->next->next;
-			(*list)->next->next = *list;
+			current->prev->next = current->next;
+			if (current->next != NULL)
+				current->next->prev = current->prev;
+			current->next = *list;
+			current->prev = NULL;
+			(*list)->prev = current;
+			*list = current;
 			print_list(*list);
-		} /*end forward check*/
-		if ((*list)->prev->n < (*list)->prev->prev->n && (*list)->prev->prev != NULL)
+		}
+		else
 		{
-			printf("hello, back check");
-			*list = (*list)->prev->prev; /*move pointer back*/
-			(*list)->next->prev = (*list)->prev;
-			(*list)->prev = (*list)->next;
-			(*list)->next = (*list)->next->next;
-			(*list)->next->next = *list;
-			*list = (*list)->next->next;
-			print_list(*list);
-		} /*end back check*/
-	} /*end while*/
+			if (insertion_point->next != current)
+			{
+				current->prev->next = current->next;
+				if (current->next != NULL)
+					current->next->prev = current->prev;
+				current->next = insertion_point->next;
+				insertion_point->next->prev = current;
+				insertion_point->next = current;
+				current->prev = insertion_point;
+				print_list(*list);
+			}
+		}
+		print_list(*list);
+		current = next_node;
+	}
 } /*end insertion*/
 
 
