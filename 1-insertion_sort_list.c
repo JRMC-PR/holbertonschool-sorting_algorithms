@@ -5,45 +5,35 @@
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *current, *insertion_point, *next_node;
+	listint_t *current = (*list)->next;
+	listint_t *prev, *next_node;
 	/*validate parameter*/
 	if (list == NULL || *list == NULL || (*list)->next == NULL)
 		return;
-	current = (*list)->next;
 	while (current != NULL)
 	{
-		insertion_point = current->prev;
 		next_node = current->next;
-		while (insertion_point != NULL && insertion_point->n > current->n)
-			insertion_point = insertion_point->prev;
-		if (insertion_point == NULL)
+		while (current->prev != NULL && current->n < current->prev->n)
 		{
-			current->prev->next = current->next;
+			prev = current->prev;
+			/*Swap temp and temp->prev*/
 			if (current->next != NULL)
-				current->next->prev = current->prev;
-			current->next = *list;
-			current->prev = NULL;
-			(*list)->prev = current;
-			*list = current;
-			print_list(*list);
-		}
-		else
-		{
-			if (insertion_point->next != current)
-			{
-				current->prev->next = current->next;
-				if (current->next != NULL)
-					current->next->prev = current->prev;
-				current->next = insertion_point->next;
-				insertion_point->next->prev = current;
-				insertion_point->next = current;
-				current->prev = insertion_point;
-				print_list(*list);
-			}
-		}
-		print_list(*list);
+				current->next->prev = prev;
+			prev->next = current->next;
+			current->prev = prev->prev;
+			prev->prev = current;
+			/*Update the head of the list if necessary*/
+			if (current->prev != NULL)
+				current->prev->next = current;
+			else
+				*list = current;
+			current->next = prev;
+
+			print_list(*list); /*Print the list after each swap*/
+			/*Move temp backwards*/
+		} /*end inner while*/
 		current = next_node;
-	}
+	} /*end outer while*/
 } /*end insertion*/
 
 
